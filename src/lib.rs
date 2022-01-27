@@ -1,16 +1,18 @@
 #![feature(const_btree_new)]
 #![no_std]
 
+// 1️⃣ External packages (crates) and internal modules import
 use codec::{Decode, Encode};
 use gstd::{debug, msg, prelude::*};
 use scale_info::TypeInfo;
 
 gstd::metadata! {
-    title: "Voting_App",
+    title: "Voting App",
     handle:
         input: Action,
     state:
-        output: BTreeMap<String, i32>,
+        input: Option<String>,
+        output: BTreeMap<String, u32>,
 }
 
 #[derive(Debug, TypeInfo, Decode)]
@@ -43,13 +45,13 @@ impl State {
         *counter += 1;
     }
 
-    // Получить информацию по всем кандидатам
-    pub fn get_candidates(&self) -> BTreeMap<String, i32> {
-        self.votes_received.clone()
+    // Получить голоса по имени кандидата
+    pub fn get_total_votes_for(self, name: String) -> Option<i32> {
+        self.votes_received.get(&name).cloned()
     }
 }
 
-// 3️⃣ Иницилизируем стейт
+// Иницилизируем стейт
 static mut STATE: State = State::new();
 
 #[no_mangle]
@@ -74,15 +76,27 @@ pub unsafe extern "C" fn handle() {
 
             msg::reply((), 0, 0);
 
-            debug!("Voted f: {:?}", name);
+            debug!("Voted for: {:?}", name);
         }
     }
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn meta_state() -> *mut [i32; 2] {
-    let votes: BTreeMap<String, i32> = STATE.votes_received.clone();
-    let encoded = votes.encode();
+    let candidate: Option<String> = msg::load().expect("failed to decode input argument");
+
+    let encoded = match candidate {
+        None => STATE.votes_received.clone().encode(),
+        Some(name) => {
+            let votes_for_candidate = STATE
+                .votes_received
+                .get(&name)
+                .expect("can't find any candidate");
+
+            votes_for_candidate.encode()
+        }
+    };
+
     let result = gstd::macros::util::to_wasm_ptr(&encoded[..]);
     core::mem::forget(encoded);
 
