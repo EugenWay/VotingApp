@@ -57,6 +57,7 @@ static mut STATE: State = State::new();
 #[no_mangle]
 pub unsafe extern "C" fn init() {}
 
+#[no_mangle]
 pub unsafe extern "C" fn handle() {
     let action: Action = msg::load().unwrap();
 
