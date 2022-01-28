@@ -35,7 +35,7 @@ cargo install --git https://github.com/gear-tech/gear wasm-proc
 ### 🏗️ Build
 
 ```shell
-cargo +nightly build --target wasm32-unknown-unknown --release
+RUSTFLAGS="-C link-args=--import-memory" cargo +nightly build --release --target=wasm32-unknown-unknown
 wasm-proc --path ./target/wasm32-unknown-unknown/release/voting_app.wasm
 ```
 
