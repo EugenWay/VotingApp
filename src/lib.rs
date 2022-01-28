@@ -1,11 +1,14 @@
 #![feature(const_btree_new)]
 #![no_std]
 
-// 1️⃣ External packages (crates) and internal modules import
+// External packages (crates) and internal modules import
 use codec::{Decode, Encode};
 use gstd::{debug, msg, prelude::*};
 use scale_info::TypeInfo;
 
+// This defines the meta information about the contract
+// for the Gear IDEA portal to parse.
+// It also defines the communication interface via input / output fields.
 gstd::metadata! {
     title: "Voting App",
     handle:
@@ -27,36 +30,34 @@ pub struct State {
 }
 
 impl State {
-    // Создать стейт
+    // Create a state
     pub const fn new() -> Self {
         Self {
             votes_received: BTreeMap::new(),
         }
     }
 
-    // Добавить кандидата
+    // Add new candidate
     pub fn add_candidate(&mut self, candidate: String) {
         self.votes_received.insert(candidate, 0);
     }
 
-    // Проголосовать за кандидата по имени
+    // Vote for candidate by name. If candidate no exist add it
     pub fn vote_for_candidate(&mut self, name: String) {
         let counter = self.votes_received.entry(name).or_insert(0);
         *counter += 1;
     }
-
-    // Получить голоса по имени кандидата
-    pub fn get_total_votes_for(self, name: String) -> Option<i32> {
-        self.votes_received.get(&name).cloned()
-    }
 }
 
-// Иницилизируем стейт
+// The state itself (i.e. the variable state will be accessed through)
 static mut STATE: State = State::new();
 
+// Init function that is executed once upon contract initialization
+// Here is empty
 #[no_mangle]
 pub unsafe extern "C" fn init() {}
 
+// Handle function that processes the incoming message
 #[no_mangle]
 pub unsafe extern "C" fn handle() {
     let action: Action = msg::load().unwrap();
@@ -82,6 +83,7 @@ pub unsafe extern "C" fn handle() {
     }
 }
 
+// The function that returns a part of memory with a state
 #[no_mangle]
 pub unsafe extern "C" fn meta_state() -> *mut [i32; 2] {
     let candidate: Option<String> = msg::load().expect("failed to decode input argument");
@@ -92,7 +94,7 @@ pub unsafe extern "C" fn meta_state() -> *mut [i32; 2] {
             let votes_for_candidate = STATE
                 .votes_received
                 .get(&name)
-                .expect("can't find any candidate");
+                .expect("Can't find any candidate");
 
             votes_for_candidate.encode()
         }
