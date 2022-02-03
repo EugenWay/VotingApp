@@ -53,14 +53,14 @@ Create a new account using Polkadot.js extension. **Don't forget to save the mne
 
 - Go to https://idea.gear-tech.io/
 - Connect to your account using the **Connect** button. Allow website access to your wallet in Polkadot.js extension.
-- Top up yout test account using the **Get test account** button. This button can be pressed several times.
-- Upload the program (`.opt.wasm`) and metadata (`.meta.wasm`) giving some meaninful name to the program and setting the gas limit to `100'000'000`. Sign the transaction using Polkadot.js extension.
+- Top up your test account using the **Get test account** button. This button can be pressed several times.
+- Upload the program (`.opt.wasm`) and metadata (`.meta.wasm`) giving some meaningful name to the program and setting the gas limit to `100'000'000`. Sign the transaction using Polkadot.js extension.
 - Find the program in **Recently uploaded programs** section and copy its address.
 
 ### 📒 Add new Candidate/Vote for Candidate
 
 - Find your program in the **All programs** section and open the message sending form.
-- Add new candidate or vote for existing one.
+- Add a new candidate or vote for an existing one.
 - Set the **Gas limit** to `300'000'000` and click **Send request**. Sign the transaction using Polkadot.js extension.
 
 ### 📒 Read State
