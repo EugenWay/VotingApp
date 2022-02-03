@@ -32,11 +32,22 @@ rustup target add wasm32-unknown-unknown --toolchain nightly
 cargo install --git https://github.com/gear-tech/gear wasm-proc
 ```
 
+... or ...
+
+```shell
+make prepare
+```
+
 ### 🏗️ Build
 
 ```shell
 RUSTFLAGS="-C link-args=--import-memory" cargo +nightly build --release --target=wasm32-unknown-unknown
 wasm-proc --path ./target/wasm32-unknown-unknown/release/voting_app.wasm
+```
+... or ...
+
+```shell
+make
 ```
 
 ## Using
