@@ -14,14 +14,26 @@ gstd::metadata! {
     handle:
         input: Action,
     state:
-        input: Option<String>,
-        output: BTreeMap<String, u32>,
+        input: StateAction,
+        output: StateReply,
 }
 
 #[derive(Debug, TypeInfo, Decode)]
 pub enum Action {
     AddCandidate(String),
     VoteForCandidate(String),
+}
+
+#[derive(Debug, TypeInfo, Encode)]
+pub enum StateReply {
+    All(BTreeMap<String, i32>),
+    VotesFor(i32),
+}
+
+#[derive(Debug, TypeInfo, Decode)]
+pub enum StateAction {
+    All,
+    VotesFor(String),
 }
 
 #[derive(Clone)]
@@ -86,17 +98,18 @@ pub unsafe extern "C" fn handle() {
 // The function that returns a part of memory with a state
 #[no_mangle]
 pub unsafe extern "C" fn meta_state() -> *mut [i32; 2] {
-    let candidate: Option<String> = msg::load().expect("failed to decode input argument");
+    let query: StateAction = msg::load().expect("failed to decode input argument");
 
-    let encoded = match candidate {
-        None => STATE.votes_received.clone().encode(),
-        Some(name) => {
+    let encoded = match query {
+        StateAction::All => StateReply::All(STATE.votes_received.clone()).encode(),
+
+        StateAction::VotesFor(name) => {
             let votes_for_candidate = STATE
                 .votes_received
                 .get(&name)
                 .expect("Can't find any candidate");
 
-            votes_for_candidate.encode()
+            StateReply::VotesFor(votes_for_candidate.clone()).encode()
         }
     };
 
