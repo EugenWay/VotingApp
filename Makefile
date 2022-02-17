@@ -5,8 +5,8 @@ exp:
 
 all:
 	cargo +nightly build --target wasm32-unknown-unknown --release
-	wasm-proc --path ./target/wasm32-unknown-unknown/release/gear_feeds_channel.wasm
-	ls -la ./target/wasm32-unknown-unknown/release/gear_feeds_channel*.wasm
+	wasm-proc --path ./target/wasm32-unknown-unknown/release/voting_app.wasm
+	ls -la ./target/wasm32-unknown-unknown/release/voting_app*.wasm
 
 prepare:
 	rustup toolchain add nightly
