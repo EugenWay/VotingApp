@@ -64,11 +64,6 @@ impl State {
 // The state itself (i.e. the variable state will be accessed through)
 static mut STATE: State = State::new();
 
-// Init function that is executed once upon contract initialization
-// Here is empty
-#[no_mangle]
-pub unsafe extern "C" fn init() {}
-
 // Handle function that processes the incoming message
 #[no_mangle]
 pub unsafe extern "C" fn handle() {
@@ -80,7 +75,7 @@ pub unsafe extern "C" fn handle() {
         Action::AddCandidate(name) => {
             STATE.add_candidate(name.clone());
 
-            msg::reply((), 0, 0);
+            msg::reply((), 0);
 
             debug!("Added new candidate: {:?}", name);
         }
@@ -88,7 +83,7 @@ pub unsafe extern "C" fn handle() {
         Action::VoteForCandidate(name) => {
             STATE.vote_for_candidate(name.clone());
 
-            msg::reply((), 0, 0);
+            msg::reply((), 0);
 
             debug!("Voted for: {:?}", name);
         }

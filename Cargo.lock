@@ -52,10 +52,11 @@ dependencies = [
 [[package]]
 name = "dlmalloc"
 version = "0.1.4"
-source = "git+https://github.com/gear-tech/dlmalloc-rust.git?rev=a981bb84ed1e6edcceb4db6f93450551353c31dc#a981bb84ed1e6edcceb4db6f93450551353c31dc"
+source = "git+https://github.com/gear-tech/dlmalloc-rust.git?rev=703192a04d55a75899a69ca8c9f70810de421797#703192a04d55a75899a69ca8c9f70810de421797"
 dependencies = [
  "libc",
  "libc_print",
+ "page_size",
  "static_assertions",
  "str-buf",
 ]
@@ -133,7 +134,7 @@ dependencies = [
 [[package]]
 name = "galloc"
 version = "0.1.0"
-source = "git+https://github.com/gear-tech/gear#a81a3e26f75978d6dafca9a5cd2f4c23976ac1bc"
+source = "git+https://github.com/gear-tech/gear#d5bf6d9affbb625ff921efcc6c844e4d09e4507c"
 dependencies = [
  "dlmalloc",
 ]
@@ -141,12 +142,12 @@ dependencies = [
 [[package]]
 name = "gcore"
 version = "0.1.0"
-source = "git+https://github.com/gear-tech/gear#a81a3e26f75978d6dafca9a5cd2f4c23976ac1bc"
+source = "git+https://github.com/gear-tech/gear#d5bf6d9affbb625ff921efcc6c844e4d09e4507c"
 
 [[package]]
 name = "gstd"
 version = "0.1.0"
-source = "git+https://github.com/gear-tech/gear#a81a3e26f75978d6dafca9a5cd2f4c23976ac1bc"
+source = "git+https://github.com/gear-tech/gear#d5bf6d9affbb625ff921efcc6c844e4d09e4507c"
 dependencies = [
  "bs58",
  "futures",
@@ -162,7 +163,7 @@ dependencies = [
 [[package]]
 name = "gstd-codegen"
 version = "0.1.0"
-source = "git+https://github.com/gear-tech/gear#a81a3e26f75978d6dafca9a5cd2f4c23976ac1bc"
+source = "git+https://github.com/gear-tech/gear#d5bf6d9affbb625ff921efcc6c844e4d09e4507c"
 dependencies = [
  "quote",
  "syn",
@@ -206,6 +207,16 @@ version = "0.1.16"
 source = "git+https://github.com/grishasobol/rust-libc-print.git#b300804809e7a5f1c8fab4d2d11bcea29217bc70"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "page_size"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eebde548fbbf1ea81a99b128872779c437752fb99f217c45245e1a61dcd9edcd"
+dependencies = [
+ "libc",
+ "winapi",
 ]
 
 [[package]]
@@ -393,3 +404,25 @@ dependencies = [
  "primitive-types",
  "scale-info",
 ]
+
+[[package]]
+name = "winapi"
+version = "0.3.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419"
+dependencies = [
+ "winapi-i686-pc-windows-gnu",
+ "winapi-x86_64-pc-windows-gnu",
+]
+
+[[package]]
+name = "winapi-i686-pc-windows-gnu"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
+
+[[package]]
+name = "winapi-x86_64-pc-windows-gnu"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
